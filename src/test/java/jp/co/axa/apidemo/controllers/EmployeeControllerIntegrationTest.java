@@ -10,9 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -37,7 +36,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -50,21 +48,16 @@ public class EmployeeControllerIntegrationTest {
     @Mock
     private EmployeeServiceImpl mockEmployeeService;
 
+    @InjectMocks
     private EmployeeController employeeController;
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(this);
-        employeeController = new EmployeeController();
-        employeeController.setEmployeeService(mockEmployeeService);
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController).build();
     }
 
     @Test
     public void getEmployees_success() throws Exception {
-        given(this.mockEmployeeService.retrieveEmployees())
-                .willReturn(createEmployees());
-
         when(mockEmployeeService.retrieveEmployees()).thenReturn(createEmployees());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employees")
@@ -79,8 +72,6 @@ public class EmployeeControllerIntegrationTest {
     @Test
     public void getEmployees_empty() throws Exception {
         List<Employee> mockEmployees = new ArrayList<>();
-        given(this.mockEmployeeService.retrieveEmployees())
-                .willReturn(mockEmployees);
 
         when(mockEmployeeService.retrieveEmployees()).thenReturn(mockEmployees);
 
@@ -93,8 +84,6 @@ public class EmployeeControllerIntegrationTest {
     @Test
     public void getEmployee_success() throws Exception {
         Employee mockEmployee = createEmployee();
-        given(this.mockEmployeeService.getEmployee(mockEmployee.getId()))
-                .willReturn(mockEmployee);
 
         when(mockEmployeeService.getEmployee(mockEmployee.getId())).thenReturn(mockEmployee);
 
@@ -105,19 +94,6 @@ public class EmployeeControllerIntegrationTest {
                 .andExpect(jsonPath("$.name", is("John")))
                 .andExpect(jsonPath("$.salary", is(60000)))
                 .andExpect(jsonPath("$.department", is("Sales")));
-    }
-
-    @Test
-    public void getEmployee_notFound() throws Exception {
-        Employee mockEmployee = createEmployee();
-        given(this.mockEmployeeService.getEmployee(mockEmployee.getId()))
-                .willReturn(mockEmployee);
-
-        when(mockEmployeeService.getEmployee(mockEmployee.getId())).thenThrow(new EntityNotFoundException("Employee not found"));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employees/" + mockEmployee.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -203,21 +179,8 @@ public class EmployeeControllerIntegrationTest {
     public void deleteEmployee_success() throws Exception {
         Employee employee = createEmployee();
 
-        EmployeeServiceImpl serviceSpy = Mockito.spy(mockEmployeeService);
-        Mockito.doNothing().when(serviceSpy).deleteEmployee(employee.getId());
-
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/employees/" + employee.getId())
-                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent());
-
-        verify(mockEmployeeService, times(1)).deleteEmployee(employee.getId());
-    }
-
-    @Test
-    public void deleteEmployee_notFound() throws Exception {
-        Employee employee = createEmployee();
-
-        EmployeeServiceImpl serviceSpy = Mockito.spy(mockEmployeeService);
-        Mockito.doNothing().when(serviceSpy).deleteEmployee(employee.getId());
+        EmployeeServiceImpl serviceSpy = spy(mockEmployeeService);
+        doNothing().when(serviceSpy).deleteEmployee(employee.getId());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/employees/" + employee.getId())
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent());

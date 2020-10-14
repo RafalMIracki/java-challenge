@@ -1,4 +1,4 @@
-package jp.co.axa.apidemo.controllers.error;
+package jp.co.axa.apidemo.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

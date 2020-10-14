@@ -51,10 +51,11 @@ What I have done:
 -added HTTP response codes
 -added exception handling
 -added lombok annotation
+-added basic logging
 -changed employeeId to UUID format
 
 If I would have more time I would:
--improve the exception handling with controllerAdvice
+-improve the exception handling
 -improve the test coverage
 -add user roles and JWT support (at the moment I can only assume what the users/admin should be able to do)
 -add filtering and pagination to retrieveEmployees endpoint
