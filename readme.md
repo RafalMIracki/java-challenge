@@ -42,3 +42,30 @@ Application (with the embedded H2 database) is ready to be used ! You can access
 - Appropriate usage of packages
 - Is the application running as expected
 - No performance issues
+
+#### My comments
+What I have done:
+-added validation to endpoints
+-added integration tests
+-added transactions
+-added HTTP response codes
+-added exception handling
+-added lombok annotation
+-changed employeeId to UUID format
+
+If I would have more time I would:
+-improve the exception handling with controllerAdvice
+-improve the test coverage
+-add user roles and JWT support (at the moment I can only assume what the users/admin should be able to do)
+-add filtering and pagination to retrieveEmployees endpoint
+-add .yaml documentation
+
+I've noticed that one of the suggestions was to add comments in the code, however most of the code
+is self-explanatory and useless comments can be a bad thing. Overall it depends on the approach that
+the team adopts, as it's important to keep the code consistent while working in a team environment.
+
+When it comes to the documentation, I wanted to write it in .yaml format however unfortunately I've
+run out of time because of the amount of work at my current company.
+
+I think one of the difficulties was lack of strict business requirements as that would make interesting
+and could showcase the use of Java/Spring features better.

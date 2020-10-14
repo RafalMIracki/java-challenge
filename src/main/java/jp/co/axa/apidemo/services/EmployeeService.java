@@ -1,6 +1,7 @@
 package jp.co.axa.apidemo.services;
 
 import jp.co.axa.apidemo.entities.Employee;
+import jp.co.axa.apidemo.request.EmployeeRequest;
 
 import java.util.List;
 
@@ -8,11 +9,11 @@ public interface EmployeeService {
 
     public List<Employee> retrieveEmployees();
 
-    public Employee getEmployee(Long employeeId);
+    public Employee getEmployee(String employeeId);
 
-    public void saveEmployee(Employee employee);
+    public Employee saveEmployee(EmployeeRequest request);
 
-    public void deleteEmployee(Long employeeId);
+    public void deleteEmployee(String employeeId);
 
-    public void updateEmployee(Employee employee);
+    public Employee updateEmployee(String employeeId, EmployeeRequest request);
 }
